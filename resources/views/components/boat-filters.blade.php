@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Boat;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 new class extends Component 
@@ -15,7 +15,7 @@ new class extends Component
 
     public function mount()
     {
-        $this->availableTypes = Boat::distinct('boat_type')
+        $this->availableTypes = DB::table('boats')->distinct('boat_type')
             ->orderBy('boat_type')
             ->pluck('boat_type')
             ->toArray();

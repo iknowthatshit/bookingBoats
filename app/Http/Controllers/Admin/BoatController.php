@@ -11,8 +11,8 @@ class BoatController extends Controller
 {
     public function index()
     {
-         $boats = Boat::latest()->paginate(10);
-        return view('admin.boats.index', compact('boats'));
+        $boats = Boat::paginate(10);
+        return view('admin.boats.index', ['boats' => $boats]);
     }
 
     /**
@@ -44,8 +44,7 @@ class BoatController extends Controller
 
         Boat::create($validated);
 
-        return redirect()->route('admin.boats.index')
-            ->with('success', 'Лодка добавлена');
+        return redirect()->route('admin.boats.index')->with('success', 'Лодка добавлена');
     }
 
     /**
@@ -61,7 +60,7 @@ class BoatController extends Controller
      */
     public function edit(Boat $boat)
     {
-        return view('admin.boats.edit', compact('boat'));
+        return view('admin.boats.edit', ['boat' => $boat]);
     }
 
     /**
@@ -88,8 +87,7 @@ class BoatController extends Controller
 
         $boat->update($validated);
 
-        return redirect()->route('admin.boats.index')
-            ->with('success', 'Лодка обновлена');
+        return redirect()->route('admin.boats.index')->with('success', 'Лодка обновлена');
     }
 
     /**
@@ -103,7 +101,6 @@ class BoatController extends Controller
 
         $boat->delete();
 
-        return redirect()->route('admin.boats.index')
-            ->with('success', 'Лодка удалена');
+        return redirect()->route('admin.boats.index')->with('success', 'Лодка удалена');
     }
 }
