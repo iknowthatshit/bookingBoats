@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\Boat;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Admin\BoatController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,15 +22,16 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])
         ->name('bookings.cancel');
+    Route::post('/bookings/{booking}/pay', [BookingController::class, 'pay'])
+        ->name('bookings.pay');
 });
-Route::post('/bookings/{booking}/pay', [BookingController::class, 'pay'])
-    ->name('bookings.pay');
-    
-Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
-    Route::resource('boats', \App\Http\Controllers\Admin\BoatController::class);
+
+Route::prefix('admin')->middleware(['role:admin'])->name('admin.')->group(function () {
+    Route::resource('boats', BoatController::class);
 });
 
 Route::get('/dashboard', function () {
     return redirect('/');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 require __DIR__.'/settings.php';
