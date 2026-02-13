@@ -82,15 +82,12 @@ new class extends Component
 ?>
 
 <div>
-    <!-- ЗАГОЛОВОК -->
     <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-800 mb-2">
-            Доступные лодки для аренды
+            Лодки для аренды
         </h1>
-        <p class="text-gray-600">Фильтруйте по типу, макс. местам и цене</p>
     </div>
 
-    <!-- ПОИСКОВАЯ СТРОКА -->
     <div class="mb-6">
         <div class="relative">
             <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" 
@@ -105,10 +102,8 @@ new class extends Component
         </div>
     </div>
 
-    <!-- ФИЛЬТРЫ -->
     <livewire:boat-filters />
 
-    <!-- ИНФОРМАЦИЯ О РЕЗУЛЬТАТАХ -->
     <div class="mb-6">
         <p class="text-gray-600">
             Найдено лодок: <span class="font-bold">{{ $this->filteredBoats->total() }}</span>
@@ -116,11 +111,7 @@ new class extends Component
     </div>
 
     @if($this->filteredBoats->isEmpty())
-        <!-- Сообщение если нет результатов -->
         <div class="bg-white rounded-xl shadow p-8 text-center">
-            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
             <h3 class="text-xl font-bold text-gray-700 mb-2">
                 @if($searchQuery)
                     По запросу "{{ $searchQuery }}" ничего не найдено
@@ -133,7 +124,6 @@ new class extends Component
             </p>
         </div>
     @else
-        <!-- СПИСОК ЛОДОК -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             @foreach($this->filteredBoats as $boat)
                 @php
@@ -154,28 +144,22 @@ new class extends Component
                     </div>
 
                     <div class="p-6">
-                        <!-- Заголовок лодки -->
                         <h3 class="text-xl font-bold text-gray-800 mb-2">{{ $boat->name }}</h3>
                         <div class="flex items-center gap-3 mb-4">
                             <span class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
                                 {{ $boat->boat_type }}
                             </span>
-                            <span class="flex items-center text-gray-600 text-sm">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                </svg>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
                                 {{ $boat->capacity }} чел.
                             </span>
                         </div>
                         <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ $boat->description }}</p>
                         
-                        <!-- Цена -->
                         <div class="text-right mb-6">
                             <span class="text-2xl font-bold text-blue-600">{{ number_format($boat->price_per_day, 0, '', ' ') }}₽</span>
                             <span class="text-sm text-gray-500"> / день</span>
                         </div>
                         
-                        <!-- Мини-календарь на 7 дней -->
                         <div class="mb-6">
                             <h4 class="text-sm font-medium text-gray-700 mb-2">Доступность на неделю</h4>
                             <div class="grid grid-cols-7 gap-1 text-center text-xs">
@@ -195,7 +179,7 @@ new class extends Component
                                         $isToday = $dateStr === $today->format('Y-m-d');
                                         $isBooked = in_array($dateStr, $bookedDates);
                                     @endphp
-                                    <div class="p-2 rounded @if($isToday) bg-blue-100 border-2 border-blue-500 @elseif($isBooked) bg-gray-200 @else bg-white border border-gray-200 @endif">
+                                    <div class="p-2 rounded @if($isBooked) bg-gray-200 @else bg-white border border-gray-200 @endif">
                                         {{ Carbon::parse($dateStr)->day }}
                                         @if($isBooked)
                                             <div class="mt-1">
@@ -205,23 +189,9 @@ new class extends Component
                                     </div>
                                 @endforeach
                             </div>
-                            <div class="mt-3 flex items-center justify-center text-xs text-gray-500">
-                                <div class="flex items-center mr-4">
-                                    <div class="w-3 h-3 bg-white border border-gray-300 rounded mr-1"></div>
-                                    <span>Свободно</span>
-                                </div>
-                                <div class="flex items-center mr-4">
-                                    <div class="w-3 h-3 bg-blue-100 border-2 border-blue-500 rounded mr-1"></div>
-                                    <span>Сегодня</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="w-3 h-3 bg-gray-200 rounded mr-1"></div>
-                                    <span>Занято</span>
-                                </div>
-                            </div>
+                            
                         </div>
 
-                        <!-- Кнопка бронирования -->
                         <a href="{{ route('booking.create', $boat) }}" 
                            class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center font-medium py-3 rounded-lg transition duration-200">
                             Забронировать
@@ -231,7 +201,6 @@ new class extends Component
             @endforeach
         </div>
 
-        <!-- Пагинация -->
         {{ $this->filteredBoats->links() }}
     @endif
 </div>

@@ -54,7 +54,6 @@ new class extends Component
 ?>
 
 <div x-data="{ show: @entangle('showFilters') }">
-    <!-- КНОПКА ФИЛЬТРОВ -->
     <button wire:click="toggleFilters" 
             class="flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition w-full mb-4">
         <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,13 +73,11 @@ new class extends Component
         </span>
     </button>
 
-    <!-- ПАНЕЛЬ ФИЛЬТРОВ -->
     <div x-show="show" 
          x-transition
          class="bg-white rounded-xl shadow-lg p-6 mb-6">
         
         <div class="space-y-6">
-            <!-- ТИП ЛОДКИ -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                     Тип лодки
@@ -93,18 +90,14 @@ new class extends Component
                     @endforeach
                 </select>
             </div>
-
-            <!-- МИНИМАЛЬНОЕ КОЛ-ВО МЕСТ -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                     Мин. мест
                 </label>
                 <input type="number" wire:model.live="minCapacity" min="1" placeholder="От 1" 
                        class="w-full border-gray-300 rounded-lg px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
-                <p class="text-xs text-gray-500 mt-1">Лодки с вместимостью не меньше указанного</p>
             </div>
 
-            <!-- ЦЕНА -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -122,8 +115,7 @@ new class extends Component
                 </div>
             </div>
         </div>
-
-        <!-- КНОПКИ -->
+        
         <div class="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
             <button wire:click="resetFilters" 
                     class="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium">

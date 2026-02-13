@@ -80,7 +80,6 @@ class BoatController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            // Удаляем старое фото, если было
             if ($boat->image) {
                 Storage::disk('public')->delete($boat->image);
             }

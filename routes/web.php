@@ -10,15 +10,12 @@ Route::get('/', function () {
 
 
 Route::middleware('auth')->group(function () {
-    // Страница создания бронирования
     Route::get('/boats/{boat}/book', [BookingController::class, 'create'])
         ->name('booking.create');
-    
-    // Обработка бронирования
+
     Route::post('/boats/{boat}/book', [BookingController::class, 'store'])
         ->name('booking.store');
     
-    // Список моих бронирований
     Route::get('/my-bookings', [BookingController::class, 'index'])
         ->name('bookings.index');
 
@@ -27,6 +24,7 @@ Route::middleware('auth')->group(function () {
 });
 Route::post('/bookings/{booking}/pay', [BookingController::class, 'pay'])
     ->name('bookings.pay');
+    
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
     Route::resource('boats', \App\Http\Controllers\Admin\BoatController::class);
 });

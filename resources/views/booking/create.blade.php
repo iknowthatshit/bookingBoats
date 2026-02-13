@@ -5,7 +5,6 @@
 @section('content')
 <div class="py-8">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Хлебные крошки -->
         <nav class="mb-6 text-sm text-gray-500">
             <ol class="flex items-center space-x-2">
                 <li><a href="{{ route('home') }}" class="hover:text-blue-600">Главная</a></li>
@@ -15,14 +14,12 @@
         </nav>
 
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <!-- Заголовок -->
             <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-8 py-6 text-white">
                 <h1 class="text-2xl md:text-3xl font-bold">Бронирование лодки</h1>
-                <p class="mt-2 text-blue-100">Выберите удобные даты</p>
+                <p class="mt-2 text-blue-100">Выберите дату бронирования</p>
             </div>
 
             <div class="p-6 md:p-8">
-                <!-- Инфо о лодке -->
                 <div class="mb-8 p-6 bg-blue-50 rounded-xl">
                      <div class="grid md:grid-cols-2 gap-6">
                         <div class="aspect-video bg-gray-200 rounded-lg overflow-hidden">
@@ -32,7 +29,7 @@
                             @else
                                 <div class="flex items-center justify-center h-full text-gray-400">
                                     <svg class="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
                                     </svg>
                                 </div>
                             @endif
@@ -44,7 +41,6 @@
                                     {{ $boat->boat_type }}
                                 </span>
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-200 text-gray-800">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM6 5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                                     {{ $boat->capacity }} чел.
                                 </span>
                             </div>
@@ -63,7 +59,6 @@
                     @csrf
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <!-- Календарь -->
                         <div class="lg:col-span-2">
                             <h3 class="text-lg font-semibold mb-4">Выберите даты</h3>
                             <div id="booking-calendar" class="w-full border rounded-lg shadow-sm"></div>
@@ -76,7 +71,6 @@
                             </div>
                         </div>
 
-                        <!-- Сводка и кнопка -->
                         <div class="lg:sticky lg:top-8 lg:self-start">
                             <div class="bg-gray-50 border rounded-xl p-6">
                                 <h3 class="text-lg font-semibold mb-4">Сводка</h3>
@@ -282,7 +276,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Double-click для одного дня
     let lastClick = 0;
     document.getElementById('booking-calendar').addEventListener('click', e => {
         const target = e.target.closest('.flatpickr-day');

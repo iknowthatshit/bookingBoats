@@ -4,13 +4,10 @@
 
 @section('content')
 <div class="py-8">
-    <!-- Заголовок -->
     <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-800 mb-2">Мои бронирования</h1>
-        <p class="text-gray-600">Здесь вы можете управлять всеми своими бронированиями</p>
     </div>
 
-    <!-- Сообщения -->
     @if(session('success'))
         <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
             <div class="flex items-center">
@@ -33,12 +30,8 @@
         </div>
     @endif
 
-    <!-- Пустой список -->
     @if($bookings->isEmpty())
         <div class="bg-white rounded-xl shadow p-8 text-center">
-            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
             <h3 class="text-xl font-bold text-gray-700 mb-2">
                 У вас пока нет бронирований
             </h3>
@@ -51,7 +44,6 @@
             </a>
         </div>
     @else
-        <!-- Фильтры статусов -->
         <div class="mb-6">
             <div class="flex flex-wrap gap-2">
                 <span class="text-sm text-gray-600 mr-3">Фильтр по статусу:</span>
@@ -78,14 +70,12 @@
             </div>
         </div>
 
-        <!-- Список бронирований -->
         <div class="space-y-6">
             @foreach($bookings->filter(function($booking) {
                 return !request('status') || $booking->status == request('status');
             }) as $booking)
                 <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300">
                     <div class="p-6">
-                        <!-- Заголовок и статус -->
                         <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
                             <div>
                                 <h3 class="text-xl font-bold text-gray-800 mb-2">
@@ -119,7 +109,6 @@
                             </div>
                         </div>
 
-                        <!-- Детали -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
                                 <h4 class="font-medium text-gray-700 mb-2">Даты аренды</h4>
@@ -137,16 +126,14 @@
                             </div>
                         </div>
 
-                        <!-- Действия -->
                         <div class="flex justify-end gap-3 pt-4 border-t border-gray-200">
                             @if($booking->status == 'pending')
                                 <div x-data="{ showPaymentModal: false }">
                                     <button @click="showPaymentModal = true"
                                             class="px-5 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium">
-                                        💳 Оплатить
+                                            Оплатить
                                     </button>
 
-                                    <!-- Модальное окно оплаты -->
                                     <div x-show="showPaymentModal" x-transition 
                                         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
                                         @click.away="showPaymentModal = false">
@@ -159,7 +146,7 @@
                                             
                                             <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg mb-6">
                                                 <p class="text-sm text-yellow-700">
-                                                    ⚠️ Это тестовая оплата. Деньги не списываются.
+                                                     Это тестовая оплата. Деньги не списываются.
                                                 </p>
                                             </div>
 
@@ -168,7 +155,7 @@
                                                     @csrf
                                                     <button type="submit"
                                                             class="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium">
-                                                        💳 Подтвердить оплату
+                                                         Подтвердить оплату
                                                     </button>
                                                 </form>
                                                 <button @click="showPaymentModal = false"
@@ -180,7 +167,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Кнопка отмены -->
                                 <form action="{{ route('bookings.cancel', $booking) }}" method="POST" 
                                     onsubmit="return confirm('Вы уверены, что хотите отменить это бронирование?')">
                                     @csrf
@@ -207,41 +193,6 @@
                     </div>
                 </div>
             @endforeach
-        </div>
-
-        <!-- Информация о статусах -->
-        <div class="mt-8 bg-gray-50 rounded-xl p-6">
-            <h4 class="text-lg font-semibold text-gray-800 mb-4">Пояснения по статусам</h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="flex items-center">
-                    <span class="inline-block w-3 h-3 bg-yellow-400 rounded-full mr-3"></span>
-                    <div>
-                        <span class="font-medium">Ожидание</span>
-                        <p class="text-sm text-gray-600">Бронирование создано, ожидает подтверждения</p>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-3"></span>
-                    <div>
-                        <span class="font-medium">Подтверждено</span>
-                        <p class="text-sm text-gray-600">Бронирование подтверждено, лодка забронирована</p>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <span class="inline-block w-3 h-3 bg-red-500 rounded-full mr-3"></span>
-                    <div>
-                        <span class="font-medium">Отменено</span>
-                        <p class="text-sm text-gray-600">Бронирование было отменено</p>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <span class="inline-block w-3 h-3 bg-purple-500 rounded-full mr-3"></span>
-                    <div>
-                        <span class="font-medium">Оплачено</span>
-                        <p class="text-sm text-gray-600">Бронирование оплачено и завершено</p>
-                    </div>
-                </div>
-            </div>
         </div>
     @endif
 </div>

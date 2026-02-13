@@ -20,8 +20,7 @@ class BookingController extends Controller
         }
         
         $bookedDates = [];
-        $bookings = $boat->bookings()
-            ->whereIn('status', ['pending', 'confirmed', 'completed'])
+        $bookings = $boat->bookings()->whereIn('status', ['pending', 'confirmed', 'completed'])
             ->where('end_date', '>=', Carbon::today())
             ->get();
 
@@ -90,10 +89,7 @@ class BookingController extends Controller
 
     public function index()
     {
-        $bookings = Auth::user()->bookings()
-            ->with('boat')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $bookings = Auth::user()->bookings()->with('boat')->orderBy('created_at', 'desc')->get();
             
         return view('booking.index', compact('bookings'));
     }
@@ -120,8 +116,7 @@ class BookingController extends Controller
         $conflictingBookings = $boat->bookings()
             ->whereIn('status', ['pending', 'confirmed'])
             ->where(function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('start_date', [$startDate, $endDate])
-                      ->orWhereBetween('end_date', [$startDate, $endDate])
+                $query->whereBetween('start_date', [$startDate, $endDate])->orWhereBetween('end_date', [$startDate, $endDate])
                       ->orWhere(function ($q) use ($startDate, $endDate) {
                           $q->where('start_date', '<', $startDate)
                             ->where('end_date', '>', $endDate);
