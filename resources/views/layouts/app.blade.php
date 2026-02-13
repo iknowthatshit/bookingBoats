@@ -8,7 +8,6 @@
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @livewireStyles
 
-<!-- Flatpickr CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
 
@@ -35,36 +34,28 @@
     }
 </style></head>
 <body class="bg-gray-50">
-    <!-- Навигация -->
-    <nav class="bg-white shadow sticky top-0 z-50">  <!-- Добавьте sticky -->
+    <nav class="bg-white shadow sticky top-0 z-50"> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
-                <!-- Логотип слева -->
                 <div class="flex items-center">
                     <a href="/" class="text-xl font-bold text-blue-600 flex items-center gap-2 hover:text-blue-800 transition">
                         <span></span>
                         Boat Booking
                     </a>
                 </div>
-                
-            <!-- Навигация пользователя справа -->
             <div class="flex items-center space-x-4">
                 @auth
-                    <!-- Кнопка меню пользователя -->
                     <div class="relative" x-data="{ open: false }" @click.outside="open = false" @keydown.escape="open = false">
                         <button @click="open = !open" 
                                 class="flex items-center space-x-2 text-gray-700 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1"
                                 :aria-expanded="open">
                             <span class="font-medium">{{ Auth::user()->name }}</span>
-                            <!-- Стрелка (галочка) -->
                             <svg :class="{ 'transform rotate-180': open }" 
                                  class="w-4 h-4 transition-transform duration-200" 
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
-                        
-                        <!-- Выпадающее меню -->
                         <div x-show="open" x-transition:enter="transition ease-out duration-100"
                              x-transition:enter-start="transform opacity-0 scale-95"
                              x-transition:enter-end="transform opacity-100 scale-100"
@@ -117,7 +108,6 @@
     </div>
 </nav>
 
-<!-- Основной контент -->
 <main class="py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         @if(session('success'))
