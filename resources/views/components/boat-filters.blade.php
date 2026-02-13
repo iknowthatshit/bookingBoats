@@ -15,10 +15,7 @@ new class extends Component
 
     public function mount()
     {
-        $this->availableTypes = DB::table('boats')->distinct('boat_type')
-            ->orderBy('boat_type')
-            ->pluck('boat_type')
-            ->toArray();
+        $this->availableTypes = DB::table('boats')->distinct('boat_type')->orderBy('boat_type')->pluck('boat_type')->toArray();
     }
 
     public function updated()
@@ -48,7 +45,6 @@ new class extends Component
     public function toggleFilters()
     {
         $this->showFilters = !$this->showFilters;
-        $this->dispatch('toggle-filters', show: $this->showFilters);
     }
 };
 ?>

@@ -178,15 +178,15 @@
                                 </form>
                             @elseif($booking->status == 'completed')
                                 <span class="px-5 py-2.5 bg-purple-100 text-purple-800 rounded-lg font-medium">
-                                    ✅ Оплачено
+                                    Оплачено
                                 </span>
                             @elseif($booking->status == 'confirmed')
                                 <span class="px-5 py-2.5 bg-green-100 text-green-800 rounded-lg font-medium">
-                                    ✅ Подтверждено
+                                    Подтверждено
                                 </span>
                             @elseif($booking->status == 'cancelled')
                                 <span class="px-5 py-2.5 bg-red-100 text-red-800 rounded-lg font-medium">
-                                    ❌ Отменено
+                                    Отменено
                                 </span>
                             @endif
                         </div>

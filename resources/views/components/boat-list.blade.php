@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Request;
 
 new class extends Component 
 {
-    use WithPagination;
 
     public $searchQuery = '';
     
@@ -31,7 +30,7 @@ new class extends Component
 
     public function getFilteredBoatsProperty()
     {
-        $query = Boat::query()
+        return Boat::query()
             ->where('availability', true)
             ->when($this->filters['boatType'], fn($q) => $q->where('boat_type', $this->filters['boatType']))
             ->when($this->filters['minCapacity'], fn($q) => $q->where('capacity', '>=', $this->filters['minCapacity']))
@@ -49,20 +48,8 @@ new class extends Component
                 $q->whereIn('status', ['pending', 'confirmed', 'completed'])
                   ->where('end_date', '>=', Carbon::today());
             }])
-            ->orderBy('price_per_day');
+            ->orderBy('price_per_day')->paginate(10);
 
-        $boats = $query->get();
-
-        // Manual pagination
-        $perPage = 10;
-        $currentPage = LengthAwarePaginator::resolveCurrentPage() ?? 1;
-        $pagedData = $boats->slice(($currentPage - 1) * $perPage, $perPage)->values();
-        $paginated = new LengthAwarePaginator($pagedData, $boats->count(), $perPage, $currentPage, [
-            'path' => Request::url(),
-            'query' => Request::query(),
-        ]);
-
-        return $paginated;
     }
 
     public function getBookedDates(Boat $boat)
@@ -161,11 +148,8 @@ new class extends Component
                         </div>
                         
                         <div class="mb-6">
-                            <h4 class="text-sm font-medium text-gray-700 mb-2">Доступность на неделю</h4>
                             <div class="grid grid-cols-7 gap-1 text-center text-xs">
-                                @foreach(['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] as $day)
-                                    <div class="text-gray-500">{{ $day }}</div>
-                                @endforeach
+
                                 @php
                                     $today = Carbon::today();
                                     $weekDates = [];
