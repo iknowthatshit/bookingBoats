@@ -147,6 +147,48 @@
 
 <script>
 const pricePerDay = {{ $boat->price_per_day }};
+const bookedDates = @json($bookedDates);
+
+// Добавляем проверку при отправке формы
+document.getElementById('bookingForm').addEventListener('submit', function(e) {
+    const startDate = document.getElementById('start_date').value;
+    const endDate = document.getElementById('end_date').value;
+    
+    if (!startDate || !endDate) {
+        e.preventDefault();
+        alert('Выберите даты бронирования');
+        return;
+    }
+    
+    // Проверяем, не забронирована ли начальная дата
+    if (bookedDates.includes(startDate)) {
+        e.preventDefault();
+        alert('Дата начала уже забронирована');
+        return;
+    }
+    
+    // Проверяем, не забронирована ли конечная дата
+    if (bookedDates.includes(endDate)) {
+        e.preventDefault();
+        alert('Дата окончания уже забронирована');
+        return;
+    }
+    
+    // Проверяем все даты в диапазоне
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const currentDate = new Date(start);
+    
+    while (currentDate <= end) {
+        const dateStr = currentDate.toISOString().split('T')[0];
+        if (bookedDates.includes(dateStr)) {
+            e.preventDefault();
+            alert('В выбранном диапазоне есть уже забронированные даты');
+            return;
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+});
 
 function calculateTotal() {
     const startDate = document.getElementById('start_date').value;
