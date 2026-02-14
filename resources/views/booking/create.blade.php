@@ -83,7 +83,7 @@
                                            name="end_date" 
                                            id="end_date"
                                            value="{{ old('end_date') }}"
-                                           min="{{ date('Y-m-d', strtotime('+1 day')) }}"
+                                           min="{{ date('Y-m-d') }}"
                                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 @error('end_date') border-red-500 @enderror"
                                            required
                                            onchange="calculateTotal()">
@@ -96,6 +96,10 @@
                                 <div id="dateError" class="hidden p-3 bg-red-100 text-red-700 rounded-lg text-sm">
                                     Дата окончания не может быть раньше даты начала
                                 </div>
+                                
+                               
+                                
+                           
                             </div>
                         </div>
                         
@@ -147,48 +151,22 @@
 
 <script>
 const pricePerDay = {{ $boat->price_per_day }};
-const bookedDates = @json($bookedDates);
 
-// Добавляем проверку при отправке формы
-document.getElementById('bookingForm').addEventListener('submit', function(e) {
+function updateEndDateMin() {
     const startDate = document.getElementById('start_date').value;
-    const endDate = document.getElementById('end_date').value;
+    const endDateInput = document.getElementById('end_date');
     
-    if (!startDate || !endDate) {
-        e.preventDefault();
-        alert('Выберите даты бронирования');
-        return;
-    }
-    
-    // Проверяем, не забронирована ли начальная дата
-    if (bookedDates.includes(startDate)) {
-        e.preventDefault();
-        alert('Дата начала уже забронирована');
-        return;
-    }
-    
-    // Проверяем, не забронирована ли конечная дата
-    if (bookedDates.includes(endDate)) {
-        e.preventDefault();
-        alert('Дата окончания уже забронирована');
-        return;
-    }
-    
-    // Проверяем все даты в диапазоне
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const currentDate = new Date(start);
-    
-    while (currentDate <= end) {
-        const dateStr = currentDate.toISOString().split('T')[0];
-        if (bookedDates.includes(dateStr)) {
-            e.preventDefault();
-            alert('В выбранном диапазоне есть уже забронированные даты');
-            return;
+    if (startDate) {
+
+        endDateInput.min = startDate;
+        
+        if (endDateInput.value && endDateInput.value < startDate) {
+            endDateInput.value = '';
         }
-        currentDate.setDate(currentDate.getDate() + 1);
     }
-});
+    
+    calculateTotal();
+}
 
 function calculateTotal() {
     const startDate = document.getElementById('start_date').value;
@@ -210,6 +188,9 @@ function calculateTotal() {
     if (startDate && endDate) {
         const start = new Date(startDate);
         const end = new Date(endDate);
+        
+        start.setHours(0, 0, 0, 0);
+        end.setHours(0, 0, 0, 0);
         
 
         if (end < start) {
@@ -245,5 +226,11 @@ function calculateTotal() {
     }
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    const startDate = document.getElementById('start_date').value;
+    if (startDate) {
+        document.getElementById('end_date').min = startDate;
+    }
+});
 </script>
 @endsection

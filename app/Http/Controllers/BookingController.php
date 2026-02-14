@@ -44,17 +44,12 @@ class BookingController extends Controller
         $startDate = Carbon::parse($validated['start_date']);
         $endDate = Carbon::parse($validated['end_date']);
         
-         $existingBooking = Booking::where('boat_id', $boat->id)
-        ->whereIn('status', ['pending', 'confirmed'])
-        ->where('start_date', '<=', $endDate)
-        ->where('end_date', '>=', $startDate)
-        ->first();
-    
-    if ($existingBooking) {
-        return back()->withErrors([
-            'dates' => 'Лодка уже забронирована на эти даты. Попробуйте выбрать другие.'
-        ])->withInput();
-    }
+        $exists = $boat->bookings()->where('boat_id',$boat->id)->where(function($query) use ($startDate, $endDate) {
+            $query->whereBetween('start_date',[$startDate,$endDate])->orWhereBetween('end_date',[$startDate,$endDate]);})->exists();
+        if ($exists) {
+            return back()->with('error','Это время уже забронировано.');
+        }
+
 
         $daysCount = $startDate->diffInDays($endDate) + 1;
         $totalPrice = $boat->price_per_day * $daysCount;
