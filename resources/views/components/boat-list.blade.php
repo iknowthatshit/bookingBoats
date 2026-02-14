@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Request;
 
 new class extends Component 
 {
-
+    use WithPagination;
     public $searchQuery = '';
     
     public $filters = [
@@ -30,28 +30,15 @@ new class extends Component
 
     public function getFilteredBoatsProperty()
     {
-        return Boat::query()
-            ->where('availability', true)
-            ->when($this->filters['boatType'], fn($q) => $q->where('boat_type', $this->filters['boatType']))
-            ->when($this->filters['minCapacity'], fn($q) => $q->where('capacity', '>=', $this->filters['minCapacity']))
-            ->when($this->filters['minPrice'], fn($q) => $q->where('price_per_day', '>=', $this->filters['minPrice']))
-            ->when($this->filters['maxPrice'], fn($q) => $q->where('price_per_day', '<=', $this->filters['maxPrice']))
-            ->when($this->searchQuery, function($q) {
-                $search = "%{$this->searchQuery}%";
-                $q->where(function($sub) use ($search) {
-                    $sub->where('name', 'like', $search)
-                        ->orWhere('description', 'like', $search)
-                        ->orWhere('boat_type', 'like', $search);
-                });
-            })
-            ->with(['bookings' => function($q) {
-                $q->whereIn('status', ['pending', 'confirmed', 'completed'])
-                  ->where('end_date', '>=', Carbon::today());
-            }])
-            ->orderBy('price_per_day')->paginate(10);
-
+        return Boat::query() // Убрали where('availability', true)
+        ->ofType($this->filters['boatType'])
+        ->minCapacity($this->filters['minCapacity'])
+        ->minPrice($this->filters['minPrice'])
+        ->maxPrice($this->filters['maxPrice'])
+        ->search($this->searchQuery)
+        ->orderBy('price_per_day')
+        ->paginate(10);
     }
-
     public function getBookedDates(Boat $boat)
     {
         $bookedDates = [];
